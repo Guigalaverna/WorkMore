@@ -28,7 +28,7 @@ export default function Home({
     >
       <div className={styles.container}>
         <Head>
-          <title>Início | MoveIt</title>
+          <title>Início | Work.More</title>
         </Head>
         <ExperienceBar />
 
