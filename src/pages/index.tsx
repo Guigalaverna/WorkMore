@@ -8,6 +8,7 @@ import Countdown from '../components/Countdown';
 import ChallengeBox from '../components/ChallengeBox';
 import ChallengesProvider from '../contexts/ChallengeContext';
 import { GetServerSideProps } from 'next';
+import Sidebar from '../components/Sidebar';
 
 interface HomeProps {
   level: number;
@@ -26,6 +27,7 @@ export default function Home({
       currentExperience={currentExperience}
       challengesCompleted={challengesCompleted}
     >
+      <Sidebar pageActive="countdown" />
       <div className={styles.container}>
         <Head>
           <title>Início | Work.More</title>

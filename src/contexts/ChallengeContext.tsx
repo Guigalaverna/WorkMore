@@ -10,6 +10,7 @@ interface ChallengesProviderData {
   level: number;
   currentExperience: number;
   challengesCompleted: number;
+  awards?: Array<AwardsProps>;
 }
 
 interface ChallengesContext {
@@ -29,6 +30,12 @@ interface ChallengesContext {
   closeModal: () => void;
 }
 
+interface AwardsProps {
+  id: number;
+  type: 'body' | 'eye';
+  amount: number;
+}
+
 export const ChallengesContext = createContext({} as ChallengesContext);
 
 export default function ChallengesProvider({
@@ -42,6 +49,9 @@ export default function ChallengesProvider({
   const [challengesCompleted, setChallengesCompleted] = useState(
     rest.challengesCompleted ?? 0
   );
+
+  const [awards, setAwards] = useState<Array<AwardsProps>>(rest.awards ?? []);
+
   const [activeChallenge, setActiveChallenge] = useState(null);
   const [isLevelUpModalOpen, setIsLevelUpModalOpen] = useState(false);
 
@@ -83,7 +93,7 @@ export default function ChallengesProvider({
   function completeChallenge() {
     if (!activeChallenge) return;
 
-    const { amount } = activeChallenge;
+    const { amount, type } = activeChallenge;
 
     let finalExperience = currentExperience + amount;
 
@@ -95,13 +105,24 @@ export default function ChallengesProvider({
     setCurrentExperience(finalExperience);
     setActiveChallenge(null);
     setChallengesCompleted(challengesCompleted + 1);
+    setAwards([
+      ...awards,
+      {
+        amount,
+        id: 1,
+        type,
+      },
+    ]);
+
+    console.log(awards);
   }
 
   useEffect(() => {
     Cookies.set('level', String(level));
     Cookies.set('currentExperience', String(currentExperience));
     Cookies.set('challengesCompleted', String(challengesCompleted));
-  }, [level, currentExperience, challengesCompleted]);
+    Cookies.set('awards', JSON.stringify(awards));
+  }, [level, currentExperience, challengesCompleted, awards]);
 
   useEffect(() => {
     Notification.requestPermission();
