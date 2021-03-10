@@ -27,7 +27,7 @@ export default function Home({
       currentExperience={currentExperience}
       challengesCompleted={challengesCompleted}
     >
-      <Sidebar pageActive="countdown" />
+      {/* <Sidebar pageActive="countdown" /> */}
       <div className={styles.container}>
         <Head>
           <title>Início | Work.More</title>

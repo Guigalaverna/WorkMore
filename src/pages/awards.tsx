@@ -23,14 +23,19 @@ function ListAwards(awards?: Array<AwardsProps>) {
 
   console.log(awards);
 
-  awards.map(award => {
-    return (
-      <div key={award.id}>
-        <img src={`icons/${award.type}.svg`} alt={award.type} />
-        <span style={{ color: 'green' }}>+ {award.amount} xp</span>
-      </div>
-    );
-  });
+  return (
+    <>
+      {awards.map(award => {
+        return (
+          <div key={award.id}>
+            <img src={`icons/${award.type}.svg`} alt={award.type} />
+            <span style={{ color: 'green' }}>+ {award.amount} xp</span>
+          </div>
+        );
+      })}
+      ;
+    </>
+  );
 }
 
 export default function Home({
