@@ -9,25 +9,29 @@ import ChallengeBox from '../components/ChallengeBox';
 import ChallengesProvider from '../contexts/ChallengeContext';
 import { GetServerSideProps } from 'next';
 import Sidebar from '../components/Sidebar';
+import { User } from 'next-auth';
+import { getSession } from 'next-auth/client';
 
-interface HomeProps {
-  level: number;
+interface IUser extends User {
+  id: number;
+  totalExperience: number;
   currentExperience: number;
+  level: number;
   challengesCompleted: number;
 }
 
-export default function Home({
-  level,
-  challengesCompleted,
-  currentExperience,
-}: HomeProps) {
+interface HomeProps {
+  user: IUser;
+}
+
+export default function Home({ user }: HomeProps) {
   return (
     <ChallengesProvider
-      level={level}
-      currentExperience={currentExperience}
-      challengesCompleted={challengesCompleted}
+      level={user.level}
+      currentExperience={user.currentExperience}
+      challengesCompleted={user.challengesCompleted}
     >
-      {/* <Sidebar pageActive="countdown" /> */}
+      <Sidebar pageActive="countdown" />
       <div className={styles.container}>
         <Head>
           <title>Início | Work.More</title>
@@ -37,7 +41,7 @@ export default function Home({
         <CountdownProvider>
           <section>
             <div>
-              <Profile />
+              <Profile user={user} />
               <CompletedChallenges />
               <Countdown />
             </div>
@@ -52,13 +56,20 @@ export default function Home({
 }
 
 export const getServerSideProps: GetServerSideProps = async ctx => {
-  const { level, currentExperience, challengesCompleted } = ctx.req.cookies;
+  const response = await getSession({ req: ctx.req });
+
+  if (!response) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
 
   return {
     props: {
-      level: Number(level),
-      currentExperience: Number(currentExperience),
-      challengesCompleted: Number(challengesCompleted),
+      user: response.user,
     },
   };
 };

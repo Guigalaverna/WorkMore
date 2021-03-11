@@ -18,7 +18,7 @@ interface AwardsProps {
   amount: number;
 }
 
-function ListAwards(awards?: Array<AwardsProps>) {
+function ListAwards(awards: any) {
   if (!awards) return;
 
   console.log(awards);
